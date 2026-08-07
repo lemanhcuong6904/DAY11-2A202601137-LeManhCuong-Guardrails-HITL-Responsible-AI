@@ -2,15 +2,12 @@
 Lab 11 — Part 2A: Input Guardrails
   TODO 1: Injection detection (normalization + layered signals)
   TODO 2: Topic filter
-  TODO 3: Input Guardrail Plugin (ADK)
+  TODO 3: Input Guardrail Plugin (OpenAI runtime)
 """
 import re
 
-from google.genai import types
-from google.adk.plugins import base_plugin
-from google.adk.agents.invocation_context import InvocationContext
-
 from core.config import ALLOWED_TOPICS, BLOCKED_TOPICS
+from core.openai_runtime import BasePlugin, InvocationContext, types
 
 
 # ============================================================
@@ -93,7 +90,7 @@ def topic_filter(user_input: str) -> bool:
 #   - Return types.Content to block, or None to pass through
 # ============================================================
 
-class InputGuardrailPlugin(base_plugin.BasePlugin):
+class InputGuardrailPlugin(BasePlugin):
     """Plugin that blocks bad input before it reaches the LLM."""
 
     def __init__(self):

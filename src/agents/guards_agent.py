@@ -11,12 +11,6 @@ from __future__ import annotations
 
 import re
 
-from google.adk.agents import llm_agent
-from google.adk import runners
-from google.adk.plugins import base_plugin
-from google.adk.agents.invocation_context import InvocationContext
-from google.genai import types
-
 from agents.security_boundary import (
     ActionDecision,
     ActionRequest,
@@ -27,7 +21,8 @@ from agents.security_boundary import (
     contains_secret,
     normalize_for_security,
 )
-from core.config import ALLOWED_TOPICS, BLOCKED_TOPICS
+from core.config import ALLOWED_TOPICS, BLOCKED_TOPICS, MODEL_NAME
+from core.openai_runtime import BasePlugin, InMemoryRunner, InvocationContext, LlmAgent, types
 from core.utils import chat_with_agent
 
 # Secrets embedded in the guarded system prompt (same values as unsafe agent).
@@ -170,7 +165,7 @@ def check_secret_leak(response: str) -> bool:
     return False
 
 
-class GuardsInputPlugin(base_plugin.BasePlugin):
+class GuardsInputPlugin(BasePlugin):
     def __init__(self):
         super().__init__(name="guards_input")
         self.blocked_count = 0
@@ -202,7 +197,7 @@ class GuardsInputPlugin(base_plugin.BasePlugin):
         return None
 
 
-class GuardsOutputPlugin(base_plugin.BasePlugin):
+class GuardsOutputPlugin(BasePlugin):
     def __init__(self):
         super().__init__(name="guards_output")
         self.redacted_count = 0
@@ -240,12 +235,12 @@ class GuardsOutputPlugin(base_plugin.BasePlugin):
 def create_guards_agent():
     """Create VinBank agent with strong input + output guardrails (bonus target)."""
     plugins = [GuardsInputPlugin(), GuardsOutputPlugin()]
-    agent = llm_agent.LlmAgent(
-        model="gemini-3.1-flash-lite",
+    agent = LlmAgent(
+        model=MODEL_NAME,
         name="guards_assistant",
         instruction=GUARDS_INSTRUCTION,
     )
-    runner = runners.InMemoryRunner(
+    runner = InMemoryRunner(
         agent=agent, app_name="guards_test", plugins=plugins
     )
     print("Guards agent created — STRONG guardrails (bonus attack target).")

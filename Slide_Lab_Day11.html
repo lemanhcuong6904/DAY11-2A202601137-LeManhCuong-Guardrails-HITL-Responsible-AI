@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="utf-8">
@@ -255,14 +255,14 @@
           <p><code>python -m venv .venv</code><br>
           <code>.\.venv\Scripts\Activate.ps1</code><br>
           <code>pip install -r requirements.txt</code><br>
-          <code>$env:GOOGLE_API_KEY="..."</code><br>
+          <code>$env:OPENAI_API_KEY="..."</code><br>
           <code>cd src; python main.py --part 1|2|3|4</code></p>
         </div>
         <div class="li"><span class="dot">•</span><span>Bộ công cụ dùng trong bài:</span></div>
         <div class="chips">
-          <span class="chip on">Google ADK</span>
+          <span class="chip on">OpenAI Responses API</span>
           <span class="chip on">NeMo Guardrails (NVIDIA · Colang)</span>
-          <span class="chip on">Gemini 3.1 Flash Lite</span>
+          <span class="chip on">OpenAI 3.1 Flash Lite</span>
         </div>
         <div class="pill">⚠️ Agent "unsafe" trong bài <b>cố tình</b> nhúng sẵn mật khẩu/API key giả trong system prompt để bạn thấy hậu quả thật — đây không phải secret thật</div>
       </div>
@@ -296,7 +296,7 @@
         </div>
         <div class="li"><span class="dot">•</span><span><b>TODO 1</b> — <code>detect_injection()</code>: ≥5 regex pattern ("ignore previous instructions", "you are now", "system prompt", "reveal your instructions", "pretend you are", "act as unrestricted")</span></div>
         <div class="li"><span class="dot">•</span><span><b>TODO 2</b> — <code>topic_filter()</code>: VinBank chỉ trả lời chủ đề banking/account/transaction/loan/interest/savings/credit card — chặn nếu blocked topic hoặc ngoài allowed topic</span></div>
-        <div class="li"><span class="dot">•</span><span><b>TODO 3</b> — <code>InputGuardrailPlugin</code> (Google ADK, <code>on_user_message_callback</code>): chặn <b>TRƯỚC</b> khi message chạm tới LLM</span></div>
+        <div class="li"><span class="dot">•</span><span><b>TODO 3</b> — <code>InputGuardrailPlugin</code> (OpenAI Responses API, <code>on_user_message_callback</code>): chặn <b>TRƯỚC</b> khi message chạm tới LLM</span></div>
       </div>
       <div class="side">
         <div class="timer" data-secs="1200">
@@ -604,8 +604,8 @@
     <div class="chips" style="justify-content:center;">
       <span class="chip">OWASP Top 10 for LLM</span>
       <span class="chip">NeMo Guardrails (GitHub)</span>
-      <span class="chip">Google ADK Docs</span>
-      <span class="chip">Gemini Cookbook</span>
+      <span class="chip">OpenAI Responses API Docs</span>
+      <span class="chip">OpenAI Cookbook</span>
       <span class="chip">AI Safety Fundamentals</span>
       <span class="chip">AI Red Teaming Guide</span>
       <span class="chip">antoan.ai — AI Safety Vietnam</span>

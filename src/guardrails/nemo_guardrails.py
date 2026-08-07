@@ -19,8 +19,8 @@ except ImportError:
 NEMO_YAML_CONFIG = textwrap.dedent("""\
     models:
       - type: main
-        engine: google
-        model: gemini-3.1-flash-lite
+        engine: openai
+        model: gpt-5-mini
 
     rails:
       input:

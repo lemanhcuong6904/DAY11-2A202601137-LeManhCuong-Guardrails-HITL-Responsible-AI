@@ -1,7 +1,7 @@
-"""Agent factories and policy helpers.
+﻿"""Agent factories and policy helpers.
 
-Keep the package importable for offline policy tests. ADK is imported only when
-an agent factory is actually requested.
+Keep the package importable for offline policy tests. OpenAI-backed agent
+runtime is imported only when an agent factory is actually requested.
 """
 from __future__ import annotations
 

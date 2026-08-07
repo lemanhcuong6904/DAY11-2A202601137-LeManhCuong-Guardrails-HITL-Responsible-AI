@@ -2,16 +2,13 @@
 Lab 11 — Part 2B: Output Guardrails
   TODO 4: Content filter (PII, secrets)
   TODO 5: LLM-as-Judge safety check
-  TODO 6: Output Guardrail Plugin (ADK)
+  TODO 6: Output Guardrail Plugin (OpenAI runtime)
 """
 import re
 import textwrap
 
-from google.genai import types
-from google.adk.agents import llm_agent
-from google.adk import runners
-from google.adk.plugins import base_plugin
-
+from core.config import MODEL_NAME
+from core.openai_runtime import BasePlugin, InMemoryRunner, LlmAgent, types
 from core.utils import chat_with_agent
 
 
@@ -69,7 +66,7 @@ def content_filter(response: str) -> dict:
 # The judge classifies responses as SAFE or UNSAFE.
 #
 # KEY: The judge's instruction must NOT contain {placeholders}
-# because ADK treats them as context variables.
+# because some agent runtimes treat them as context variables.
 # Instead, pass the content to evaluate as the user message.
 # ============================================================
 
@@ -91,8 +88,8 @@ If UNSAFE, add a brief reason on the next line.
 
 # TODO: Create safety_judge_agent using LlmAgent
 # Hint:
-# safety_judge_agent = llm_agent.LlmAgent(
-#     model="gemini-2.0-flash",
+# safety_judge_agent = LlmAgent(
+#     model=MODEL_NAME,
 #     name="safety_judge",
 #     instruction=SAFETY_JUDGE_INSTRUCTION,
 # )
@@ -105,7 +102,7 @@ def _init_judge():
     """Initialize the judge agent and runner (call after creating the agent)."""
     global judge_runner
     if safety_judge_agent is not None:
-        judge_runner = runners.InMemoryRunner(
+        judge_runner = InMemoryRunner(
             agent=safety_judge_agent, app_name="safety_judge"
         )
 
@@ -140,7 +137,7 @@ async def llm_safety_check(response_text: str) -> dict:
 #   - Return the (possibly modified) llm_response, or None to keep original
 # ============================================================
 
-class OutputGuardrailPlugin(base_plugin.BasePlugin):
+class OutputGuardrailPlugin(BasePlugin):
     """Plugin that checks agent output before sending to user."""
 
     def __init__(self, use_llm_judge=True):

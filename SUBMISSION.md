@@ -1,4 +1,4 @@
-# Hướng dẫn nộp bài — Day 11
+﻿# Hướng dẫn nộp bài — Day 11
 
 **Đề bài:** [`assignment11.md`](assignment11.md) · File này chỉ nói **cách đóng gói và nộp**.
 
@@ -183,7 +183,7 @@ Khớp `[schemas/results.schema.json](schemas/results.schema.json)`. Ví dụ:
 ```json
 {
   "student_id": "SE12345",
-  "framework": "google-adk | langgraph | nemo | pure-python | other",
+  "framework": "openai | langgraph | nemo | pure-python | other",
   "safe_queries": [
     {"input": "...", "blocked": false, "layer": null, "response_preview": "..."}
   ],

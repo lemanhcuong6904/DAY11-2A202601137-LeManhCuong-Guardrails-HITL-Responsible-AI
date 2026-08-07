@@ -11,7 +11,7 @@ from datetime import datetime, timezone
 
 
 class AuditLogPlugin:
-    """Framework-agnostic audit logger (wire into ADK callbacks or your pipeline)."""
+    """Framework-agnostic audit logger (wire into runtime callbacks or your pipeline)."""
 
     def __init__(self):
         self.name = "audit_log"

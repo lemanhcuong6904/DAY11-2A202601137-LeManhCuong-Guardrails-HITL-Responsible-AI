@@ -1,4 +1,4 @@
-# Day 11 — Controlled Agent Security (2026)
+﻿# Day 11 — Controlled Agent Security (2026)
 
 Làm sao để ứng dụng agent an toàn hơn?
 
@@ -17,7 +17,7 @@ python -m venv .venv
 
 # 2) API key
 Copy-Item .env.example .env
-# Mở .env, dán GOOGLE_API_KEY — lấy tại https://aistudio.google.com/apikey
+# Mở .env, dán OPENAI_API_KEY — lấy tại https://platform.openai.com/api-keys
 
 # 3) Cài dependency trong venv
 python -m pip install -U pip
@@ -32,7 +32,8 @@ Nếu PowerShell báo không cho chạy script:
 PowerShell (nếu chưa load `.env`):
 
 ```powershell
-$env:GOOGLE_API_KEY="dán-key-của-bạn"
+$env:OPENAI_API_KEY="dán-key-của-bạn"
+$env:OPENAI_MODEL="gpt-5-mini"
 ```
 
 ---
@@ -66,7 +67,7 @@ Hình thức: **cá nhân** (1 người / 1 MSSV). Luồng: **Setup → A → Br
 
 | # | Phần | Nội dung | Thời lượng |
 |---|------|----------|-----------:|
-| 0 | **Setup** | Cài đặt môi trường (`pip`, `GOOGLE_API_KEY`, chạy local) | 30' |
+| 0 | **Setup** | Cài đặt môi trường (`pip`, `OPENAI_API_KEY`, chạy local) | 30' |
 | 1 | **A · Phòng thủ** | 2A Input · 2B Output · 2C NeMo · Part 3 Testing · Part 4 HITL | 120' |
 | — | **Break** | Nghỉ giải lao | 10' |
 | 2 | **B · Tấn công** | Tấn công **Unsafe** (điểm B) + **Guards** (điểm cộng nếu LEAKED) | 60' |
@@ -187,5 +188,5 @@ Nộp theo [`SUBMISSION.md`](SUBMISSION.md).
 
 - [OWASP Top 10 for LLM](https://owasp.org/www-project-top-10-for-large-language-model-applications/)
 - [NeMo Guardrails](https://github.com/NVIDIA/NeMo-Guardrails)
-- [Google ADK](https://google.github.io/adk-docs/)
+- [OpenAI Responses API](https://platform.openai.com/docs/api-reference/responses)
 - [AI Safety Fundamentals](https://aisafetyfundamentals.com/)

@@ -1,15 +1,15 @@
 """
 Lab 11 — Helper Utilities
 """
-from google.genai import types
+from core.openai_runtime import types
 
 
 async def chat_with_agent(agent, runner, user_message: str, session_id=None):
     """Send a message to the agent and get the response.
 
     Args:
-        agent: The LlmAgent instance
-        runner: The InMemoryRunner instance
+        agent: The OpenAI-backed LlmAgent instance
+        runner: The OpenAI-backed InMemoryRunner instance
         user_message: Plain text message to send
         session_id: Optional session ID to continue a conversation
 
