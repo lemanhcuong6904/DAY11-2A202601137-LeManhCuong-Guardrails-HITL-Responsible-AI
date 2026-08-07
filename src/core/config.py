@@ -29,6 +29,8 @@ ALLOWED_TOPICS = [
     "tai khoan", "giao dich", "tiet kiem", "lai suat",
     "chuyen tien", "the tin dung", "so du", "vay",
     "ngan hang", "atm",
+    "tài khoản", "giao dịch", "tiết kiệm", "lãi suất",
+    "chuyển tiền", "thẻ tín dụng", "số dư", "ngân hàng",
 ]
 
 # Blocked topics (immediate reject)
