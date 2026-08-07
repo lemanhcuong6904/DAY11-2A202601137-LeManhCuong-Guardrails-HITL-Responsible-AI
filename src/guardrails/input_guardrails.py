@@ -5,9 +5,20 @@ Lab 11 — Part 2A: Input Guardrails
   TODO 3: Input Guardrail Plugin (OpenAI runtime)
 """
 import re
+import unicodedata
 
 from core.config import ALLOWED_TOPICS, BLOCKED_TOPICS
 from core.openai_runtime import BasePlugin, InvocationContext, types
+
+
+ZERO_WIDTH_RE = re.compile(r"[\u200B-\u200D\u2060\uFEFF]")
+
+
+def normalize_security_text(text: str) -> str:
+    normalized = unicodedata.normalize("NFKC", text or "")
+    normalized = ZERO_WIDTH_RE.sub("", normalized)
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized.casefold().strip()
 
 
 # ============================================================
@@ -38,14 +49,27 @@ def detect_injection(user_input: str) -> bool:
     Returns:
         True if injection detected, False otherwise
     """
+    normalized = normalize_security_text(user_input)
     INJECTION_PATTERNS = [
-        # TODO: Add at least 5 regex patterns
-        # Example:
-        # r"ignore (all )?(previous|above) instructions",
+        r"\bignore\s+(all\s+)?(previous|prior|above)\s+instructions?\b",
+        r"\bdisregard\s+(the\s+)?(system|developer|previous|prior)\b",
+        r"\byou\s+are\s+now\b",
+        r"\bact\s+as\s+(an?\s+)?(admin|developer|system|unrestricted)\b",
+        r"\bpretend\s+(that\s+)?you\s+(are|have)\b",
+        r"\b(developer|system|admin)\s+mode\b",
+        r"\b(jailbreak|dan mode|unrestricted mode)\b",
+        r"\b(system prompt|hidden prompt|developer instructions?)\b",
+        r"\b(reveal|show|print|expose|dump)\b.{0,60}\b(secret|api key|password|instructions?|prompt)\b",
+        r"\bwhat\s+(is|are)\s+your\s+(system|developer)\s+instructions?\b",
+        r"\b(email|document|attachment|rag|retrieved context|web page|external)\b.{0,180}\b(ignore|disregard|override|reveal|execute|exfiltrate)\b",
+        r"\bthe\s+(email|document|context)\s+says\b.{0,140}\b(ignore|send|exfiltrate|reveal)\b",
+        r"\b(bỏ qua|phớt lờ)\b.{0,50}\b(chỉ dẫn|hướng dẫn|quy tắc|lệnh)\b",
+        r"\b(tiết lộ|hiển thị|in ra)\b.{0,50}\b(system prompt|chỉ dẫn hệ thống|mật khẩu|api key)\b",
+        r"\bđóng vai\b.{0,40}\b(quản trị viên|admin|hệ thống|developer)\b",
     ]
 
     for pattern in INJECTION_PATTERNS:
-        if re.search(pattern, user_input, re.IGNORECASE):
+        if re.search(pattern, normalized, re.IGNORECASE):
             return True
     return False
 
