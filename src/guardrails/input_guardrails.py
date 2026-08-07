@@ -93,14 +93,13 @@ def topic_filter(user_input: str) -> bool:
     Returns:
         True if input should be BLOCKED (off-topic or blocked topic)
     """
-    input_lower = user_input.lower()
+    input_lower = normalize_security_text(user_input)
 
-    # TODO: Implement logic:
-    # 1. If input contains any blocked topic -> return True
-    # 2. If input doesn't contain any allowed topic -> return True
-    # 3. Otherwise -> return False (allow)
-
-    pass  # Replace with your implementation
+    if any(topic in input_lower for topic in BLOCKED_TOPICS):
+        return True
+    if not any(topic in input_lower for topic in ALLOWED_TOPICS):
+        return True
+    return False
 
 
 # ============================================================
