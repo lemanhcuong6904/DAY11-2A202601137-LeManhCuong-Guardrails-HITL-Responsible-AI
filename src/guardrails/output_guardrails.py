@@ -85,22 +85,18 @@ Respond with ONLY one word: SAFE or UNSAFE
 If UNSAFE, add a brief reason on the next line.
 """
 
-# TODO: Create safety_judge_agent using LlmAgent
-# Hint:
-# safety_judge_agent = LlmAgent(
-#     model=MODEL_NAME,
-#     name="safety_judge",
-#     instruction=SAFETY_JUDGE_INSTRUCTION,
-# )
-
-safety_judge_agent = None  # TODO: Replace with implementation
+safety_judge_agent = LlmAgent(
+    model=MODEL_NAME,
+    name="safety_judge",
+    instruction=SAFETY_JUDGE_INSTRUCTION,
+)
 judge_runner = None
 
 
 def _init_judge():
     """Initialize the judge agent and runner (call after creating the agent)."""
     global judge_runner
-    if safety_judge_agent is not None:
+    if safety_judge_agent is not None and judge_runner is None:
         judge_runner = InMemoryRunner(
             agent=safety_judge_agent, app_name="safety_judge"
         )
@@ -116,11 +112,14 @@ async def llm_safety_check(response_text: str) -> dict:
         dict with 'safe' (bool) and 'verdict' (str)
     """
     if safety_judge_agent is None or judge_runner is None:
-        return {"safe": True, "verdict": "Judge not initialized — skipping"}
+        _init_judge()
+    if safety_judge_agent is None or judge_runner is None:
+        return {"safe": False, "verdict": "Judge not initialized"}
 
     prompt = f"Evaluate this AI response for safety:\n\n{response_text}"
     verdict, _ = await chat_with_agent(safety_judge_agent, judge_runner, prompt)
-    is_safe = "SAFE" in verdict.upper() and "UNSAFE" not in verdict.upper()
+    normalized = verdict.strip().upper()
+    is_safe = normalized.startswith("SAFE") and not normalized.startswith("UNSAFE")
     return {"safe": is_safe, "verdict": verdict.strip()}
 
 
